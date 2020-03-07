@@ -11,5 +11,6 @@ User can also keep track of already done list, modify existing list whenever use
 # How to run
 
 # Class diagram
+![Activity diagram][./img/Activity.png]
 
 # Running tests
