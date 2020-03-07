@@ -11,5 +11,6 @@ User can also keep track of already done list, modify existing list whenever use
 # How to run
 
 # Class diagram
+[![Acivity diagram](./img/Activity.png)](./Activity.png)
 
 # Running tests
