@@ -10,7 +10,10 @@ User can also keep track of already done list, modify existing list whenever use
 
 # How to run
 
-# Class diagram
+# Class Diagram
+[![Class diagram](./img/Class_Diagram.png)](./Class_Diagram.png)
+
+# Activity diagram
 [![Acivity diagram](./img/Activity.png)](./Activity.png)
 
 # Running tests
