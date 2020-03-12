@@ -8,7 +8,13 @@ User can also keep track of already done list, modify existing list whenever use
 
 # Prerequisites
 
-# How to run
+* IntelliJ IDEA 2019.3.3
+* java version "13.0.2"
+* Text file for storing and retrieving data
+
+# User Manual
+
+Under development
 
 # Class Diagram
 [![Class diagram](./img/Class_Diagram.png)](./Class_Diagram.png)

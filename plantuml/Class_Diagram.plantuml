@@ -1,0 +1,65 @@
+@startuml
+Main -- Prompt
+Prompt *-- Storage
+Task -- Prompt
+
+class Main {
++ Main
+}
+
+class Task {
+- String taskName
+- String projectName
+- String status
+- Date taskDate
+- Date dueDate
++ getTaskName()
++ getProjectName()
++ getStatus()
++ getTaskDate()
++ getDueDate()
++ setTaskName()
++ setProjectName()
++ setStatus()
++ setTaskDate()
+}
+
+class Prompt {
+- int option
+- int taskNo
+- int count
+- int changeField
+- Date date
+- String inputText1
+- String inputText2
+- String inputText3
+- String inputText4
++ getInstance()
++ displayOption()
++ scanInput()
++ scanString()
+- addTask()
+- editTask()
+- removeTask()
+- saveExitTask()
+- taskList()
+- getTask()
+}
+
+class Storage {
+- ArrayList tasks
+- int option
+- int taskNo
+- int statusOpen
+- int statusClosed
+- String inputText1
+- String inputText2
+- String inputText3
+- String fileName
++ getInstance()
++ displayInput()
++ inputReader()
++ removeRecord()
+} 
+
+@enduml
