@@ -1,87 +1,144 @@
-/*
-ToDo reads the input file. It adds new Todo task details to arraylist. Edit, Delete the existing Task details.
-*/
-import java.util.ArrayList;
-import java.io.BufferedWriter;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+/***
+ * Storage adds, edits and deletes the Task details to the HashMap.
+ */
+
 import java.io.IOException;
 import java.util.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import javax.swing.*;
-import javax.swing.filechooser.*;
-import java.io.File;
-import java.util.Scanner;
 
-    public class Storage {
-        private static Storage storage = null;
-        private ArrayList<Task> tasks = new ArrayList<>();
-        private int option, taskNo, statusOpen = 0, statusClosed = 0;
-        private String inputText1,inputText2,inputText3;
-        String fileName = null;
+public class Storage {
 
-        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        public static Storage getInstance() {
+    private static Storage storage = null;
+    private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
+
+    public static Storage getInstance() {
 
             if (storage == null) {
-                return new Storage();
-            } else {
-                return storage;
+                storage = new Storage();
             }
+            return storage;
+    }
 
-        }
-        /*
-        Display the To do list data from ArrayList
-        */
-        public void displayInput() {
-            int choice;
-            int counter = 0;
+   /**
+    * Add new Task to the ToDo List.
+    * @param t Object of type Task
+    */
+    public void addRecord(Task t) {
 
-            System.out.println("Please Enter your choice - for sorting");
-            System.out.println("1. Sort based on Date");
-            System.out.println("2. Sort based on Project");
+        tasks.put(Integer.valueOf(t.getTaskId()),t);
+    }
 
-            choice = Prompt.getInstance().scanInput();
-            if (choice == 1) {
-                tasks.sort((Task d1, Task d2) -> d1.getTaskDate().compareTo(d2.getTaskDate()));
-            } else if (choice == 2) {
-                tasks.sort((Task d1, Task d2) -> d1.getProjectName().compareTo(d2.getProjectName()));
-            }
-            String format1 = "%-9s %-40s %-43s %-12s %-15s";
-            System.out.println(String.format("TaskNo", "TaskName", "ProjectName", "Status", "Date"));
+   /**
+    * Deletes new Task from the ToDo List.
+    * @param taskId from Task object
+    */
+    public void removeRecord(int taskId) {
 
+        tasks.remove(Integer.valueOf(taskId));
+    }
 
-            for (Task file : tasks) {
-                counter = counter + 1;
-                System.out.println(String.format(format1,counter,file.getTaskName(),file.getProjectName(),file.getStatus(),formatter.format(file.getTaskDate())));
-                String changeCase = file.getStatus().toUpperCase();
-                if (changeCase.equals("OPEN"))
-                {
-                    statusOpen = statusOpen + 1;
+   /**
+    * Get Task Object
+    * @param taskNo from Task object
+    * @return The taskNo
+    */
+    public Task getTask(int taskNo) {
+
+        Task t = tasks.get(Integer.valueOf(taskNo));
+        return t;
+    }
+
+   /**
+    * Get all the Task details
+    * @return tasks
+    */
+    public Map getAllTasks() {
+
+        return tasks;
+    }
+
+   /**
+    * Stores the details into file.
+    * @exception IOException if stream to file cannot be written to or closed.
+    */
+    public void saveToFile() throws IOException {
+
+        FileOperations.getInstance().saveToFile(tasks);
+    }
+
+   /**
+    * Reads task details from the file.
+    * @param filePath to be loaded.
+    * @exception Exception if stream to file cannot be read or closed.
+    */
+    public void readFromFile(String filePath) throws Exception {
+
+        FileOperations.getInstance().readFromFile(tasks, filePath);
+    }
+
+   /**
+    * Gets the count values for "DONE" and "ON-GOING" task.
+    * @return int[] which contains task "DONE" count at '0' index
+    * and "ON-GOING" count at index '1'.
+    */
+    public int[] getTaskCount() {
+
+        int doneCount = 0;
+        int inProgress = 0;
+        int counts[] = new int[2];
+        Iterator i = tasks.entrySet().iterator();
+
+            while (i.hasNext()){
+
+                Map.Entry me =  (Map.Entry)i.next();
+
+                if (((Task)me.getValue()).getStatus() == "DONE"){
+                    doneCount++;
+                } else {
+                    inProgress++;
                 }
-                else if(changeCase.equals("CLOSED"))
-                {
-                    statusClosed = statusClosed + 1;
-                }
             }
-            System.out.println("Number of Tasks open : "+statusOpen+" Number of Tasks Closed " + statusClosed);
-            statusOpen = 0;
-            statusClosed = 0;
+            counts[0] = inProgress;
+            counts[1] = doneCount;
+            return counts;
+    }
 
+   /**
+    * Sort the Task list based on Project name or Task date.
+    * @param option option 1 sorts the list based on Task date and
+    * option 2 sorts the list based on Project name.
+    */
+    public void sortTaskList(int option) {
+
+        ArrayList<Task> p =this.getTaskAsList();
+
+        if (option == 1) {
+            Collections.sort(p, Task.compareDate);
+        } else {
+            Collections.sort(p, Task.compareProject);
         }
-/**
- * Read the input text file and store details into Arraylist of task
- */
-        public void inputReader() throws IOException {
-            //Date date = null;
-            //JFileChooser chooser = new JFileChooser();
+
+        for (Task g : p){
+
+            System.out.println("---------");
+            System.out.println(g);
         }
+        System.out.println("---------");
+    }
 
-        public void removeRecord(int taskNo) {
+   /**
+    * Extract Task objects from HashMap and store into ArrayList.
+    * @return All Task objects in ArrayList.
+    */
+    private ArrayList<Task> getTaskAsList() {
 
+        ArrayList<Task> taskList = new ArrayList<Task>();
+        Iterator i = tasks.entrySet().iterator();
+
+        while (i.hasNext()){
+
+            Map.Entry me = (Map.Entry)i.next();
+            taskList.add((Task)me.getValue());
+            }
+            return taskList;
         }
     }
