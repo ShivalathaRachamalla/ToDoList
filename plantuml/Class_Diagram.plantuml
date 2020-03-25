@@ -1,65 +1,79 @@
 @startuml
-Main -- Prompt
-Prompt *-- Storage
-Task -- Prompt
+ToDoLy *-- Prompt
+Storage *--  FileOperations
+Storage *-- Prompt
+Task *-- Storage
 
-class Main {
-+ Main
+skinparam class {
+BackgroundColor White
+ArrowColor Black
+BorderColor Black
+}
+skinparam stereotypeCBackgroundColor BlackWhite
+
+class ToDoLy {
++ {static} main()
 }
 
-class Task {
+class Task <<Serializable>> {
+- int taskId
 - String taskName
 - String projectName
 - String status
 - Date taskDate
-- Date dueDate
+- {static} int count
++ {static} Comparator<Task> compareProject
++ {static} Comparator<Task> compareDate
++ getTaskId()
 + getTaskName()
 + getProjectName()
 + getStatus()
 + getTaskDate()
-+ getDueDate()
++ {static} getCount()
 + setTaskName()
 + setProjectName()
 + setStatus()
 + setTaskDate()
 }
 
-class Prompt {
+class FileOperations << Singleton >> {
++ {static} getInstance()
++ saveToFile()
++ readFromFile()
+} 
+
+class Prompt  << Singleton >> {
 - int option
-- int taskNo
 - int count
-- int changeField
-- Date date
-- String inputText1
-- String inputText2
-- String inputText3
-- String inputText4
 + getInstance()
 + displayOption()
 + scanInput()
 + scanString()
+- validateString()
++ displayOptions()
 - addTask()
 - editTask()
+- updateTask()
+- markTaskDone()
 - removeTask()
 - saveExitTask()
 - taskList()
-- getTask()
++ readFromFile()
+- validateDate()
 }
 
-class Storage {
-- ArrayList tasks
-- int option
-- int taskNo
-- int statusOpen
-- int statusClosed
-- String inputText1
-- String inputText2
-- String inputText3
-- String fileName
+class Storage << Singleton >> {
+- HashMap tasks
++ {static} getInstance()
 + getInstance()
-+ displayInput()
-+ inputReader()
++ addRecord()
 + removeRecord()
++ getTask()
++ getAllTasks()
++ saveToFile()
++ getTaskCount()
++ sortTaskList()
++ getTaskAsList()
 } 
 
 @enduml
